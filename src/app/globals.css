@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --color-ink: #14110d;
-  --color-ink-light: #1f1a14;
+  --color-ink: #0a0e27;
+  --color-ink-light: #121735;
   --color-crimson: #8c1d2b;
   --color-crimson-light: #b33042;
   --color-gold: #c9a227;
   --color-gold-light: #e0bf55;
   --color-parchment: #f3ece0;
-  --color-parchment-dim: #cdc3b2;
+  --color-parchment-dim: #b9bdd4;
 }
 
 @theme inline {

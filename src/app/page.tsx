@@ -1,6 +1,8 @@
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { KnotDivider } from "@/components/KnotDivider";
+import { Logo } from "@/components/Logo";
+import { CONTACT_URL } from "@/lib/links";
 
 const combatStyles = [
   {
@@ -55,7 +57,10 @@ export default function Home() {
             }}
             aria-hidden="true"
           />
-          <p className="text-xs tracking-[0.3em] text-gold">CAPITAINERIE DE PARIS</p>
+          <div className="flex justify-center">
+            <Logo size={96} />
+          </div>
+          <p className="mt-6 text-xs tracking-[0.3em] text-gold">CAPITAINERIE DE PARIS</p>
           <h1 className="mt-4 font-display text-5xl tracking-widest text-parchment sm:text-7xl">
             SAIL-FEM
           </h1>
@@ -68,10 +73,12 @@ export default function Home() {
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a
-              href="#rejoindre"
+              href={CONTACT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-sm bg-crimson px-6 py-3 text-sm tracking-widest text-parchment transition-colors hover:bg-crimson-light"
             >
-              NOUS REJOINDRE
+              NOUS CONTACTER
             </a>
             <a
               href="#prestations"
@@ -194,7 +201,7 @@ export default function Home() {
             contactez-nous directement.
           </p>
           <a
-            href="https://www.facebook.com/SailFem/"
+            href={CONTACT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-8 inline-block rounded-sm bg-crimson px-8 py-3 text-sm tracking-widest text-parchment transition-colors hover:bg-crimson-light"
