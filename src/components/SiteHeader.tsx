@@ -25,6 +25,9 @@ export function SiteHeader() {
               {link.label}
             </a>
           ))}
+          <Link href="/connexion" className="transition-colors hover:text-gold">
+            Connexion
+          </Link>
         </nav>
         <a
           href={CONTACT_URL}

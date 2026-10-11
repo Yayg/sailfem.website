@@ -1,0 +1,45 @@
+"use client";
+
+import { useActionState, useRef } from "react";
+import { createEquipment } from "./actions";
+import { Field, Select, Button, ErrorText } from "@/components/ui";
+import { EQUIPMENT_CATEGORIES } from "@/lib/equipment-categories";
+
+type State = { error?: string };
+
+export function AddEquipmentForm() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [state, formAction, pending] = useActionState<State, FormData>(
+    async (_prev, formData) => {
+      const result = (await createEquipment(formData)) ?? {};
+      if (!result.error) formRef.current?.reset();
+      return result;
+    },
+    {}
+  );
+
+  return (
+    <form ref={formRef} action={formAction} className="grid gap-4 sm:grid-cols-[2fr_1fr_2fr_auto] sm:items-end">
+      <Field label="Objet" name="name" type="text" required placeholder="Bouclier rond" />
+      <Select label="Catégorie" name="category" required defaultValue="">
+        <option value="" disabled>
+          Choisir…
+        </option>
+        {EQUIPMENT_CATEGORIES.map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
+      </Select>
+      <Field label="Détails (optionnel)" name="description" type="text" placeholder="Bois de tilleul, cuir" />
+      <Button type="submit" disabled={pending} className="h-fit">
+        {pending ? "Ajout…" : "AJOUTER"}
+      </Button>
+      {state.error && (
+        <div className="sm:col-span-4">
+          <ErrorText>{state.error}</ErrorText>
+        </div>
+      )}
+    </form>
+  );
+}
