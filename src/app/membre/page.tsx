@@ -1,11 +1,6 @@
 import { getCurrentUser } from "@/lib/current-user";
 import { Card } from "@/components/ui";
-
-const ROLE_LABELS: Record<string, string> = {
-  member: "Membre",
-  raid_organizer: "Organisateur de raid",
-  chef_de_clan: "Chef de clan",
-};
+import { ROLE_LABELS } from "@/lib/roles";
 
 export default async function MembreDashboard() {
   const user = await getCurrentUser();

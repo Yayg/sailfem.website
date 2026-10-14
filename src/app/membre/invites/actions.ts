@@ -5,14 +5,14 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/current-user";
-import { ROLES } from "@/lib/roles";
+import { hasElevatedAccess } from "@/lib/roles";
 
 const INVITE_DURATION_DAYS = 14;
 
 async function requireChefDeClan() {
   const user = await getCurrentUser();
   if (!user) redirect("/connexion");
-  if (!user.roles.includes(ROLES.CHEF_DE_CLAN)) redirect("/membre");
+  if (!hasElevatedAccess(user.roles)) redirect("/membre");
   return user;
 }
 

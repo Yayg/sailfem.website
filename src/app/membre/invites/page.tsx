@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/current-user";
-import { ROLES } from "@/lib/roles";
+import { hasElevatedAccess } from "@/lib/roles";
 import { Card } from "@/components/ui";
 import { CreateInviteForm } from "./CreateInviteForm";
 import { InviteLink } from "./InviteLink";
@@ -10,7 +10,7 @@ import { RevokeButton } from "./RevokeButton";
 export default async function InvitesPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/connexion");
-  if (!user.roles.includes(ROLES.CHEF_DE_CLAN)) redirect("/membre");
+  if (!hasElevatedAccess(user.roles)) redirect("/membre");
 
   const [roles, invites] = await Promise.all([
     db.role.findMany({ orderBy: { label: "asc" } }),

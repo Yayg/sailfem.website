@@ -24,9 +24,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  roles          UserRole[]
-  equipment      Equipment[]
-  invitesCreated Invite[]    @relation("InviteCreatedBy")
+  roles             UserRole[]
+  ownedEquipment    Equipment[] @relation("EquipmentOwner")
+  equippedEquipment Equipment[] @relation("EquipmentEquippedBy")
+  invitesCreated    Invite[]    @relation("InviteCreatedBy")
 }
 
 model UserRole {
@@ -53,14 +54,22 @@ model Invite {
   createdBy User @relation("InviteCreatedBy", fields: [createdById], references: [id])
 }
 
+// A null ownerId means the item belongs to the clan's shared pool rather
+// than to one member. equippedByUserId tracks who currently has a slotted
+// item on their loadout — the owner themself for personal gear, or a
+// borrower for clan gear. Only items with a `slot` show up on the paperdoll;
+// un-slotted items (camping gear, cooking gear...) stay list-only.
 model Equipment {
-  id          String   @id @default(cuid())
-  userId      String
-  name        String
-  category    String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String   @id @default(cuid())
+  name             String
+  category         String
+  description      String?
+  slot             String?
+  ownerId          String?
+  equippedByUserId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  owner      User? @relation("EquipmentOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  equippedBy User? @relation("EquipmentEquippedBy", fields: [equippedByUserId], references: [id], onDelete: SetNull)
 }

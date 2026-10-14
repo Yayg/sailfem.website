@@ -3,9 +3,16 @@
 import { useActionState } from "react";
 import { Field, Select, Button, ErrorText } from "@/components/ui";
 import { EQUIPMENT_CATEGORIES } from "@/lib/equipment-categories";
+import { EQUIPMENT_SLOTS } from "@/lib/equipment-slots";
 
 type State = { error?: string };
-type Item = { id: string; name: string; category: string; description: string | null };
+type Item = {
+  id: string;
+  name: string;
+  category: string;
+  description: string | null;
+  slot: string | null;
+};
 
 export function EditForm({
   item,
@@ -26,6 +33,14 @@ export function EditForm({
         {EQUIPMENT_CATEGORIES.map((c) => (
           <option key={c} value={c}>
             {c}
+          </option>
+        ))}
+      </Select>
+      <Select label="Emplacement (optionnel)" name="slot" defaultValue={item.slot ?? ""}>
+        <option value="">Aucun</option>
+        {EQUIPMENT_SLOTS.map((s) => (
+          <option key={s.slug} value={s.slug}>
+            {s.label}
           </option>
         ))}
       </Select>

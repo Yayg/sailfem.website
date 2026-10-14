@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { db } from "@/lib/db";
 import { getCurrentUser } from "@/lib/current-user";
 import { Card } from "@/components/ui";
+import { hasElevatedAccess } from "@/lib/roles";
 import { updateEquipment } from "../../actions";
 import { EditForm } from "./EditForm";
 
@@ -10,9 +11,12 @@ export default async function EditEquipmentPage({
 }: PageProps<"/membre/equipement/[id]/edit">) {
   const { id } = await params;
   const user = await getCurrentUser();
-  const item = user
-    ? await db.equipment.findFirst({ where: { id, userId: user.id } })
-    : null;
+  if (!user) notFound();
+
+  const elevated = hasElevatedAccess(user.roles);
+  const item = await db.equipment.findFirst({
+    where: elevated ? { id, OR: [{ ownerId: user.id }, { ownerId: null }] } : { id, ownerId: user.id },
+  });
 
   if (!item) notFound();
 

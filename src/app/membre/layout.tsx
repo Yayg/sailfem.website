@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/current-user";
 import { Logo } from "@/components/Logo";
-import { ROLES } from "@/lib/roles";
+import { hasElevatedAccess } from "@/lib/roles";
 import { logout } from "./actions";
 
 export default async function MembreLayout({ children }: { children: React.ReactNode }) {
@@ -11,7 +11,7 @@ export default async function MembreLayout({ children }: { children: React.React
     redirect("/connexion");
   }
 
-  const isChefDeClan = user.roles.includes(ROLES.CHEF_DE_CLAN);
+  const isChefDeClan = hasElevatedAccess(user.roles);
 
   return (
     <div className="min-h-screen bg-ink text-parchment">

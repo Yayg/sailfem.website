@@ -21,8 +21,10 @@ export async function createFirstAdmin(formData: FormData) {
     redirect("/connexion");
   }
 
-  const chefRole = await db.role.findUnique({ where: { slug: ROLES.CHEF_DE_CLAN } });
-  if (!chefRole) {
+  const bootstrapRoles = await db.role.findMany({
+    where: { slug: { in: [ROLES.CHEF_DE_CLAN, ROLES.ADMINISTRATEUR] } },
+  });
+  if (bootstrapRoles.length === 0) {
     return { error: "Les rôles n'ont pas été initialisés (seed manquant)." };
   }
 
@@ -32,7 +34,7 @@ export async function createFirstAdmin(formData: FormData) {
       name,
       email,
       passwordHash,
-      roles: { create: { roleId: chefRole.id } },
+      roles: { create: bootstrapRoles.map((role) => ({ roleId: role.id })) },
     },
   });
 
